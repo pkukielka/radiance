@@ -1,2 +1,2 @@
-scene = new Scene 1000
+scene = new Scene()
 scene.animate()
