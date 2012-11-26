@@ -28,3 +28,5 @@ class Scene
 		requestAnimationFrame(@animate)
 		@renderer.render(@scene, @camera)
 		@stats.update()
+
+new Scene().animate()
