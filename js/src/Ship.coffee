@@ -97,7 +97,7 @@ class Ship
 
 	adjustSpeedometer: (currentSpeed, maxSpeed) ->
 		for rect, i in @speedometer
-			 rect.opacity = if ((i + 1) / @speedometer.length) < Math.abs(currentSpeed / maxSpeed) then 0.4 else 0.2
+			 rect.opacity = if ((i + 1) / @speedometer.length) < Math.abs(currentSpeed / maxSpeed) then 0.5 else 0.2
 
 	createSpeedometer: ->
 		@rectangleSprite = THREE.ImageUtils.loadTexture("img/rect.png")

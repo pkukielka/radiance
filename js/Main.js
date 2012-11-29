@@ -291,7 +291,7 @@ Ship = (function() {
     _results = [];
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       rect = _ref[i];
-      _results.push(rect.opacity = ((i + 1) / this.speedometer.length) < Math.abs(currentSpeed / maxSpeed) ? 0.4 : 0.2);
+      _results.push(rect.opacity = ((i + 1) / this.speedometer.length) < Math.abs(currentSpeed / maxSpeed) ? 0.5 : 0.2);
     }
     return _results;
   };
