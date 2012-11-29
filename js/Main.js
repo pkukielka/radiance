@@ -132,7 +132,8 @@ Space = (function() {
 
 Ship = (function() {
 
-  function Ship(camera, space) {
+  function Ship(threeJsScene, camera, space) {
+    this.threeJsScene = threeJsScene;
     this.camera = camera;
     this.space = space;
     this.checkForCollisions = __bind(this.checkForCollisions, this);
@@ -149,6 +150,7 @@ Ship = (function() {
     this.moveBackward = false;
     this.moveLeft = false;
     this.moveRight = false;
+    this.createSpeedometer();
   }
 
   Ship.prototype.addEventListeners = function() {
@@ -234,6 +236,7 @@ Ship = (function() {
     this.camera.translateZ(this.velocity.z);
     this.camera.translateY((Math.random() - 0.5) * 0.1 * this.velocity.z);
     this.checkForCollisions(oldCameraPosition, this.camera.position.clone());
+    this.adjustSpeedometer(this.velocity.z, 40);
     currentDiameter = Math.sqrt(Math.pow(this.camera.position.x, 2) + Math.pow(this.camera.position.y, 2));
     if (currentDiameter > this.space.tunelDiameter / 3) {
       ratio = (this.space.tunelDiameter / 3) / currentDiameter;
@@ -282,6 +285,50 @@ Ship = (function() {
     return _results;
   };
 
+  Ship.prototype.adjustSpeedometer = function(currentSpeed, maxSpeed) {
+    var i, rect, _i, _len, _ref, _results;
+    _ref = this.speedometer;
+    _results = [];
+    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+      rect = _ref[i];
+      _results.push(rect.opacity = ((i + 1) / this.speedometer.length) < Math.abs(currentSpeed / maxSpeed) ? 0.4 : 0.2);
+    }
+    return _results;
+  };
+
+  Ship.prototype.createSpeedometer = function() {
+    var accumulatedHeight, accumulatedWidth, currentRectHeight, currentRectWidth, offset, rectNumber, rectanglesCount, sprite, windowHeight, windowWidth;
+    this.rectangleSprite = THREE.ImageUtils.loadTexture("img/rect.png");
+    windowWidth = window.innerWidth;
+    windowHeight = window.innerHeight;
+    currentRectWidth = window.innerWidth / 70;
+    currentRectHeight = currentRectWidth / 2;
+    rectanglesCount = 10;
+    offset = 0.7 * currentRectWidth;
+    accumulatedHeight = 0;
+    accumulatedWidth = Math.pow(1.15, 10) * currentRectWidth + rectanglesCount * offset;
+    return this.speedometer = (function() {
+      var _i, _results;
+      _results = [];
+      for (rectNumber = _i = 1; _i <= rectanglesCount; rectNumber = _i += 1) {
+        currentRectWidth *= 1.15;
+        currentRectHeight *= 1.15;
+        accumulatedHeight += currentRectHeight + 10;
+        sprite = new THREE.Sprite({
+          map: this.rectangleSprite,
+          fog: true
+        });
+        sprite.position.set(windowWidth - accumulatedWidth + (offset * rectNumber), windowHeight - accumulatedHeight - 10, -10);
+        sprite.color.setHSV(0.2 - 0.02 * rectNumber, 1, 1);
+        sprite.opacity = 0.2;
+        sprite.scale.set(currentRectWidth, currentRectHeight, 1);
+        this.threeJsScene.add(sprite);
+        _results.push(sprite);
+      }
+      return _results;
+    }).call(this);
+  };
+
   return Ship;
 
 })();
@@ -310,7 +357,7 @@ Scene = (function() {
     document.body.appendChild(this.renderer.domElement);
     document.body.appendChild(this.stats.domElement);
     this.space = new Space(this.scene);
-    this.ship = new Ship(this.camera, this.space);
+    this.ship = new Ship(this.scene, this.camera, this.space);
     this.camera.rotation.y = Math.PI;
   }
 

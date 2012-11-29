@@ -21,7 +21,7 @@ class Scene
 		document.body.appendChild(@stats.domElement)
 
 		@space = new Space(@scene)
-		@ship = new Ship(@camera, @space)
+		@ship = new Ship(@scene, @camera, @space)
 		
 		@camera.rotation.y = Math.PI
 
