@@ -20,9 +20,8 @@ class Scene
 		document.body.appendChild(@renderer.domElement)
 		document.body.appendChild(@stats.domElement)
 
-		tunelDiameter = 800
-		@space = new Space(@scene, tunelDiameter)
-		@ship = new Ship(@camera, tunelDiameter)
+		@space = new Space(@scene)
+		@ship = new Ship(@camera, @space)
 		
 		@camera.rotation.y = Math.PI
 

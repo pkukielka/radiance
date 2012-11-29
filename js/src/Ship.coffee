@@ -1,5 +1,5 @@
 class Ship
-	constructor: (@camera, @tunelDiameter) ->
+	constructor: (@camera, @space) ->
 		@velocity = new THREE.Vector3()
 
 		@lastUpdate = Date.now()
@@ -55,8 +55,8 @@ class Ship
 		delta = (Date.now() - @lastUpdate) * 0.1
 		@lastUpdate = Date.now()
 
-		@velocity.x += (-@velocity.x) * 0.004 * delta
-		@velocity.z += (-@velocity.z) * 0.004 * delta
+		@velocity.x += (-@velocity.x) * 0.003 * delta
+		@velocity.z += (-@velocity.z) * 0.003 * delta
 
 		if @moveForward then @velocity.z -= 0.15 * delta
 		if @moveBackward then @velocity.z += 0.15 * delta
@@ -64,14 +64,30 @@ class Ship
 		if @moveLeft then @velocity.x -= 0.05 * delta
 		if @moveRight then @velocity.x += 0.05 * delta
 
-		if @velocity.z > -10 then @velocity.z = -10
+		if @velocity.z > -5 then @velocity.z = -5
 
-		@camera.translateX(@velocity.x + (Math.random() - 0.5) * 0.1* @velocity.z)
+		oldCameraPosition = @camera.position.clone()
+
+		@camera.translateX(@velocity.x + (Math.random() - 0.5) * 0.1 * @velocity.z)
 		@camera.translateZ(@velocity.z)
 		@camera.translateY((Math.random() - 0.5) * 0.1 * @velocity.z)
 
+		@checkForCollisions(oldCameraPosition, @camera.position.clone())
+
 		currentDiameter = Math.sqrt(Math.pow(@camera.position.x, 2) +  Math.pow(@camera.position.y, 2))
-		if  currentDiameter > @tunelDiameter / 3
-			ratio = (@tunelDiameter / 3) / currentDiameter
+		if  currentDiameter > @space.tunelDiameter / 3
+			ratio = (@space.tunelDiameter / 3) / currentDiameter
 			@camera.position.x *= ratio
 			@camera.position.y *= ratio
+
+	checkForCollisions: (oldPosition, newPosition) =>
+		for orbit in @space.orbits
+			for segment in orbit
+				if oldPosition.z <= segment.position.z <= newPosition.z
+					newPosition.z = 0
+					for verticle in segment.geometry.vertices
+						if verticle.distanceTo(newPosition) < 4
+							@velocity.x *= 0.9
+							@velocity.z *= 0.9
+							@camera.translateX((Math.random() - 0.5) * @velocity.z)
+							@camera.translateY((Math.random() - 0.5) * @velocity.z)

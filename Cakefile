@@ -1,19 +1,21 @@
-mainInputFiles = [
-	'js/src/Ship.coffee',
-	'js/src/Space.coffee',
-	'js/src/Scene.coffee'
-]
+mainInputFiles = ['js/src/Space.coffee', 'js/src/Ship.coffee', 'js/src/Scene.coffee']
 #---------------------------------------------------------------------------------------------------
 
-task 'build', 'compile source', -> 
-	build(mainInputFiles, 			'js/main.js', 		false)
-	build('js/src/Hopalong.coffee', 'js/Hopalong.js', 	false)
+option '-w', '--watch', 'Watch and compile on file change'
+task 'build', 'compile source', (options) ->
+	options.watch or= off
+	build(mainInputFiles, 			'js/Main.js', 		options.watch)
+	build('js/src/Hopalong.coffee', 'js/Hopalong.js', 	options.watch)
 
-task 'watch', 'compile and watch', ->
-	build(mainInputFiles, 			'js/main.js', 		true)
-	build('js/src/Hopalong.coffee', 'js/Hopalong.js', 	true)
+task 'minify', 'minify compiles js files', ->
+	launch('uglifyjs', ['-o', 'js/Main.min.js', 'js/Main.js'])
+	launch('uglifyjs', ['-o', 'js/Hopalong.min.js', 'js/Hopalong.js'])
 
-task 'clean', 'clean generated files', -> fs.unlink outputFile
+task 'clean', 'clean generated files', -> 
+	fs.unlink 'js/Main.js'
+	fs.unlink 'js/Hopalong.js'
+	fs.unlink 'js/Main.min.js'
+	fs.unlink 'js/Hopalong.min.js'
 
 #---------------------------------------------------------------------------------------------------
 
