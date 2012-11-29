@@ -1,29 +1,48 @@
 class Space
-	constructor: (@threeJsScene) ->
-		maxSize = 1000
-		particlesPerOrbit = 40000
-		suborbitsCount = 5
-		segmentsCount = 5
-
+	constructor: (@threeJsScene, @tunelDiameter) ->
+		@particlesPerOrbit = 20000
+		@orbitsCount = 5
+		@segmentsCount = 5
 		@suborbitsDistance = 50
 		@galaxySprite = THREE.ImageUtils.loadTexture("img/galaxy.png")
-		hopalong = new Hopalong()
 
-		for suborbit in [0...suborbitsCount] by 1	
-			orbit = hopalong.createOrbit(maxSize, particlesPerOrbit, suborbit * .005 * (Math.random() - 0.5), suborbit * .005 * (Math.random() - 0.5))
-			for segment in [0...segmentsCount] by 1
-				@addSingleOrbit(orbit, suborbit + segment * 5)
+		@orbits = for orbitNumber in [0...@orbitsCount] by 1	
+			for segmentNumber in [0...@segmentsCount] by 1
+				@createParticleSystem(@suborbitsDistance * (orbitNumber + (segmentNumber * @segmentsCount)))
+		
+		@initializeOrbitsUpdates()
 
+	initializeOrbitsUpdates: =>
+		@worker = new Worker("js/Hopalong.js")
+		@worker.onmessage = (event) =>
+			orbitGeometry = (new THREE.Vector3(vertice.x, vertice.y, 0) for vertice in event.data.orbit)
 
-	addSingleOrbit: (orbitGeometry, orbitNumber) ->
-		geometry = new THREE.Geometry();
-		geometry.vertices = orbitGeometry
+			hue = Math.random()
+			for segment in @orbits[event.data.orbitNumber]
+				wasInitializedBefore = segment.geometry.vertices.length > 0
+				segment.material.color.setHSV(hue, 0.7, 1)
+				segment.geometry.vertices = orbitGeometry
+				segment.geometry.elementsNeedUpdate	= true				
+				unless wasInitializedBefore then @threeJsScene.add(segment)
 
-		material = new THREE.ParticleBasicMaterial(size: 5, map: @galaxySprite, blending: THREE.AdditiveBlending, depthTest: false, transparent : true)
-		material.color.setHSV(Math.random(), 0.7, 1)
+		updateOrbits = () =>
+			for i in [0...@orbitsCount] by 1
+				@worker.postMessage({tunelDiameter: @tunelDiameter, orbitsCount: @orbitsCount, orbitNumber: i, particlesPerOrbit: @particlesPerOrbit})
+		
+		updateOrbits()
+		setInterval(updateOrbits, 3000)
 
-		particles = new THREE.ParticleSystem(geometry, material)
-		particles.position.z = @suborbitsDistance * orbitNumber
-		particles.needsUpdate = 0
+	createParticleSystem: (zPosition) ->
+		geometry = new THREE.Geometry()
+		material = new THREE.ParticleBasicMaterial(size: 4, map: @galaxySprite, blending: THREE.AdditiveBlending, depthTest: false, transparent : true)
+		paticles = new THREE.ParticleSystem(geometry, material) 
+		paticles.position.z = zPosition
+		paticles
 
-		@threeJsScene.add(particles)	
+	updatePosition: (zCameraPosition) ->
+		for orbit, i in @orbits
+			for segment, j in orbit
+				segment.rotation.z += ((i + j) % 2 > 0 ? 1 : -1) * 0.001 * ((i + j) % 4)
+				if segment.position.z < zCameraPosition
+					segment.position.z += @suborbitsDistance * @orbitsCount * @segmentsCount
+					segment.geometry.verticesNeedUpdate = true

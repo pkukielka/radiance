@@ -1,15 +1,17 @@
-outputFile = "js/main.js"
-
-inputFiles = [
-	'js/src/Hopalong.coffee',
-	'js/src/Space.coffee'
-	'js/src/Scene.coffee',
+mainInputFiles = [
+	'js/src/Ship.coffee',
+	'js/src/Space.coffee',
+	'js/src/Scene.coffee'
 ]
 #---------------------------------------------------------------------------------------------------
 
-task 'build', 'compile source', -> build false
+task 'build', 'compile source', -> 
+	build(mainInputFiles, 			'js/main.js', 		false)
+	build('js/src/Hopalong.coffee', 'js/Hopalong.js', 	false)
 
-task 'watch', 'compile and watch', -> build true
+task 'watch', 'compile and watch', ->
+	build(mainInputFiles, 			'js/main.js', 		true)
+	build('js/src/Hopalong.coffee', 'js/Hopalong.js', 	true)
 
 task 'clean', 'clean generated files', -> fs.unlink outputFile
 
@@ -32,8 +34,8 @@ launch = (cmd, options=[]) ->
 	app.stdout.pipe(process.stdout)
 	app.stderr.pipe(process.stderr)
 
-build = (watch) ->
-	options = ['-j', outputFile, '-c']
+build = (inputFiles, outputFile, watch) ->
+	options = ['-b' ,'-j', outputFile, '-c']
 	options = options.concat inputFiles
 	options.unshift '-w' if watch 
 	launch 'coffee', options
