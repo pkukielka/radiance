@@ -8,6 +8,8 @@ Just watch out for black holes and exploding supernovas which can PUSH or PULL y
 
 Controls: Mouse & W S A D
 
+Game require modern browser (Chrome recommended) and computer with average graphic card.
+
 ![alt text](http://i47.tinypic.com/xcq16t.jpg "Screen 1")
 ![alt text](http://i46.tinypic.com/rhpr1i.jpg "Screen 2")
 ![alt text](http://i47.tinypic.com/qs30jq.jpg "Screen 3")
