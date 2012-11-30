@@ -59,6 +59,7 @@ class Ship
 		@lastUpdate = Date.now()
 
 		@velocity.x += (-@velocity.x) * 0.003 * delta
+		@velocity.y += (-@velocity.y) * 0.003 * delta
 		@velocity.z += (-@velocity.z) * 0.003 * delta
 
 		if @moveForward then @velocity.z -= 0.15 * delta
@@ -72,8 +73,8 @@ class Ship
 		oldCameraPosition = @camera.position.clone()
 
 		@camera.translateX(@velocity.x + (Math.random() - 0.5) * 0.1 * @velocity.z)
+		@camera.translateY(@velocity.y + (Math.random() - 0.5) * 0.1 * @velocity.z)
 		@camera.translateZ(@velocity.z)
-		@camera.translateY((Math.random() - 0.5) * 0.1 * @velocity.z)
 
 		@checkForCollisions(oldCameraPosition, @camera.position.clone())
 		@spedometer.update(@velocity.z, 40)
@@ -93,6 +94,8 @@ class Ship
 					for verticle in segment.geometry.vertices
 						if verticle.distanceTo(newPosition) < 4
 							@velocity.x *= 0.9
+							@velocity.y *= 0.9
 							@velocity.z *= 0.9
 							@camera.translateX((Math.random() - 0.5) * @velocity.z)
 							@camera.translateY((Math.random() - 0.5) * @velocity.z)
+							return

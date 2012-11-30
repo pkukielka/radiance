@@ -5,7 +5,7 @@ class Scene
 		@enabled = false
 
 		@scene = new THREE.Scene()
-		@scene.fog = new THREE.FogExp2(0x000000, 0.0011)
+		@scene.fog = new THREE.FogExp2(0x000000, 0.0005)
 
 		@renderer = new THREE.WebGLRenderer(clearColor: 0x000000, clearAlpha: 1, antialias: false)
 		@renderer.setSize(window.innerWidth, window.innerHeight)
@@ -22,6 +22,7 @@ class Scene
 
 		@space = new Space(@scene)
 		@ship = new Ship(@scene, @camera, @space, @displayRecord)
+		@artifacts = new Artifacts(@scene)
 		
 		@camera.rotation.y = Math.PI
 
@@ -36,6 +37,7 @@ class Scene
 	animate: =>
 		if @enabled
 			@ship.update()
+			@artifacts.update(@ship)
 			@space.updatePosition(@camera.position.z)
 
 		requestAnimationFrame(@animate)
