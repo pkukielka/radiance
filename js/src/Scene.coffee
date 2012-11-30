@@ -21,7 +21,7 @@ class Scene
 		document.body.appendChild(@stats.domElement)
 
 		@space = new Space(@scene)
-		@ship = new Ship(@scene, @camera, @space)
+		@ship = new Ship(@scene, @camera, @space, @displayRecord)
 		
 		@camera.rotation.y = Math.PI
 
@@ -41,3 +41,14 @@ class Scene
 		requestAnimationFrame(@animate)
 		@renderer.render(@scene, @camera)
 		@stats.update()
+
+	displayRecord: (record) =>
+		@disable()
+		blocker = document.getElementById('blocker')
+		instructions = document.getElementById('instructions')
+		blocker.style.display = '-webkit-box'
+		blocker.style.display = '-moz-box'
+		blocker.style.display = 'box'
+		instructions.style.display = ''
+		instructions.innerHTML = '<span style="font-size:30px">Congratulations, your score is ' + record + '!<br><br>' +
+			'To play again please press F5 button.</span>'
