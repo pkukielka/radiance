@@ -3,6 +3,7 @@ mainInputFiles = [
 	'js/src/Counters.coffee',
 	'js/src/Speedometer.coffee',
 	'js/src/Ship.coffee',
+	'js/src/Artifacts.coffee'
 	'js/src/Scene.coffee'
 ]
 #---------------------------------------------------------------------------------------------------

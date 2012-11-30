@@ -1,6 +1,6 @@
 class Space
 	constructor: (@threeJsScene) ->
-		@tunelDiameter = 800
+		@tunelDiameter = 1000
 		@particlesPerOrbit = 20000
 		@orbitsCount = 7
 		@segmentsCount = 5
@@ -37,9 +37,9 @@ class Space
 	createParticleSystem: (zPosition) ->
 		geometry = new THREE.Geometry()
 		material = new THREE.ParticleBasicMaterial(size: 4, map: @galaxySprite, blending: THREE.AdditiveBlending, depthTest: false, transparent : true)
-		paticles = new THREE.ParticleSystem(geometry, material) 
-		paticles.position.z = zPosition
-		paticles
+		praticles = new THREE.ParticleSystem(geometry, material) 
+		praticles.position.z = zPosition
+		praticles
 
 	updatePosition: (zCameraPosition) ->
 		for orbit, i in @orbits
