@@ -67,6 +67,17 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+.counter {
+    background-image: url('img/rectEmpty.png') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    opacity: '0.5';
+    position: 'absolute';
+    text-align: center;
+}
+
 #blocker {
     position: absolute;
 

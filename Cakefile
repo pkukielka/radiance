@@ -1,4 +1,10 @@
-mainInputFiles = ['js/src/Space.coffee', 'js/src/Ship.coffee', 'js/src/Scene.coffee']
+mainInputFiles = [
+	'js/src/Space.coffee',
+	'js/src/Counters.coffee',
+	'js/src/Speedometer.coffee',
+	'js/src/Ship.coffee',
+	'js/src/Scene.coffee'
+]
 #---------------------------------------------------------------------------------------------------
 
 option '-w', '--watch', 'Watch and compile on file change'
