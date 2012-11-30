@@ -4,7 +4,6 @@ Futuristic, hight speed, space racer game.
 Play it now: http://pkukielka.github.com/radiance/
 
 You are participating in the space race between different galaxy BRANCHES. Nothing is faster then you, even light.
-
 Just watch out for black holes and exploding supernovas which can PUSH or PULL you into the galaxy dust.
 
 Controls: Mouse & W S A D
