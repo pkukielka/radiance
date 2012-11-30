@@ -18,3 +18,21 @@ Game require modern browser (Chrome recommended) and computer with average graph
 ![alt text](http://i47.tinypic.com/35bsgaf.jpg "Screen 4")
 ![alt text](http://i45.tinypic.com/123l3wi.jpg "Screen 5")
 ![alt text](http://i45.tinypic.com/s5e7a1.jpg "Screen 6")
+
+### Building the code
+
+Radiance is written entirely in CoffeScript.  
+Cakefile is part of the project, so to build the repo you just need to run:  
+
+```cake build```  
+
+If you are activley changing some files then watch mode is more usefull:
+
+```cake -w build```
+
+### Technology
+
+- h5bp template (made with http://www.initializr.com/)
+- CoffeeScript
+- three.js
+- sound from http://www.jamendo.com
